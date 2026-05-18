@@ -35,7 +35,7 @@
 // ==========================================
 // Данные для последовательного контура (Бригада 6)
 #let V_ser = (
-  U: 3.5,      // По таблице 4.0 В, минус 0.5 В преподавателя
+  U: 3.5,      // По таблице 4.0 В, минус 0.5 В (условие преподавателя)
   rk: 29.0,    // Ом
   L: 224,      // мГн
   C: 7.47,     // мкФ
@@ -50,7 +50,7 @@
 
 // Данные для параллельного контура (Бригада 6)
 #let V_par = (
-  U: 29.5,     // По таблице 30.0 В, минус 0.5 В преподавателя
+  U: 29.5,     // По таблице 30.0 В, минус 0.5 В (условие преподавателя)
   C: 6.47,     // мкФ
   L: 398,      // мГн
   rk: 41.0,    // Ом
@@ -172,32 +172,38 @@
 Схема электрической цепи для исследования резонанса токов представлена на рисунке @src-circuit-2.
 
 #lab-figure(
-  above: -2em,
+  above: -1em,
   circuit-better(scale-factor: 80%, {
     import zap: *
-    node-better("T0", (0, 6), visible: false)
-    node-better("B0", (0, 0), visible: false)
-    node-better("T1", (4, 6), visible: true)
-    node-better("B1", (4, 0), visible: true)
-    node-better("T2", (8, 6), visible: true)
-    node-better("B2", (8, 0), visible: true)
-    node-better("T3", (12, 6), visible: false)
-    node-better("M3", (12, 3), visible: false)
-    node-better("B3", (12, 0), visible: false)
+    node-better("T_SRC", (0, 6), visible: true)
+    node-better("B_SRC", (0, 0), visible: true)
+    
+    // Узлы после резистора Rд
+    node-better("T_TANK", (6, 6), visible: true)
+    node-better("B_TANK", (6, 0), visible: true)
 
-    open-branch-better("U_in", "T0", "B0", label: $dot(U)$, arrow-side: "left", arrow-dir: "down")
+    // Узлы для правой ветви
+    node-better("T_R", (10, 6), visible: false)
+    node-better("M_R", (10, 3), visible: false)
+    node-better("B_R", (10, 0), visible: false)
 
-    wire("T0", "T1")
-    resistor-better("Rd", "T1", "B1", label: (content: $R_"д"$, anchor: "left"))
+    // Источник напряжения слева
+    open-branch-better("U_in", "T_SRC", "B_SRC", label: $dot(U)$, arrow-side: "left", arrow-dir: "down")
 
-    wire("T1", "T2")
-    capacitor-better("C", "T2", "B2", label: (content: $C$, anchor: "left"))
+    // Rд на ВЕРХНЕМ проводе последовательно (как на рис. 3)
+    resistor-better("Rd", "T_SRC", "T_TANK", label: (content: $R_"д"$, anchor: "bottom"))
 
-    wire("T2", "T3")
-    inductor-better("L", "T3", "M3", label: (content: $L_2$, anchor: "left"))
-    resistor-better("rk", "M3", "B3", label: (content: $r_"k2"$, anchor: "left"))
+    // Конденсатор C в первой параллельной ветви
+    capacitor-better("C", "T_TANK", "B_TANK", label: (content: $C$, anchor: "left"))
 
-    wire("B0", "B3")
+    // L2 и rk2 во второй параллельной ветви
+    wire("T_TANK", "T_R")
+    inductor-better("L", "T_R", "M_R", label: (content: $L_2$, anchor: "left"))
+    resistor-better("rk", "M_R", "B_R", label: (content: $r_"k2"$, anchor: "left"))
+
+    // Возвратные провода
+    wire("B_R", "B_TANK")
+    wire("B_TANK", "B_SRC")
   }),
   caption: [Схема для исследования параллельного колебательного контура]
 ) <src-circuit-2>
