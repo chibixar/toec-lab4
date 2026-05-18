@@ -18,7 +18,7 @@
     name: "Батюков С. В.",
   ),
   performer: (
-    name: "Ермаков В. С.",
+    name: "Минкевич А. С.",
     group: "558301",
   ),
   footer: (city: "Минск", year: 2026),
@@ -143,13 +143,7 @@
 Расчет и построение резонансных кривых тока $I(f)$, напряжения на емкости $U_C (f)$ и напряжения на идеальной индуктивности $U_L (f)$ представлены на рисунке @mathcad-series.
 
 #figure(
-  block(
-    width: 100%, 
-    height: 250pt, 
-    fill: rgb(240, 240, 240), 
-    stroke: 1pt + gray, 
-    align(center + horizon)[Место для скриншота Mathcad (последовательный контур)]
-  ),
+  image("mathcad/series.png", width: 100%),
   caption: [Резонансные кривые последовательного контура]
 ) <mathcad-series>
 
@@ -245,13 +239,7 @@
 Результаты представлены на рисунке @mathcad-parallel.
 
 #figure(
-  block(
-    width: 100%, 
-    height: 250pt, 
-    fill: rgb(240, 240, 240), 
-    stroke: 1pt + gray, 
-    align(center + horizon)[Место для скриншота Mathcad (параллельный контур)]
-  ),
+  image("mathcad/parallel.png", width: 100%),
   caption: [АЧХ и ФЧХ параллельного колебательного контура]
 ) <mathcad-parallel>
 
